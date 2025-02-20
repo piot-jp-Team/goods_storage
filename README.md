@@ -21,7 +21,7 @@ goods strage service
 
 4.保管伝票 SLIPS
 * 伝票ID
-* 伝票番号（QRコードやRFIDタグなど）
+* 伝票番号
 * 所有者ID
 * 登録日時
 * 変更日時
@@ -29,6 +29,7 @@ goods strage service
 5.伝票明細 SLIP_DETAILS
 * 伝票明細ID
 * 保管伝票ID
+* 明細行NO （伝票番号 + 行NO QRコードやRFIDタグなど）
 * 品物ID
 * 場所ID
 * 保管開始日時
@@ -79,7 +80,8 @@ erDiagram
     }
     SLIP_DETAILS {
         integer id PK
-        integer slips_id 
+        integer slips_id
+        integer record_num
         integer goods_id
         integer location_id
         datetime startdate
