@@ -16,7 +16,7 @@ goods strage service
 
 3.場所　LOCATION
 * ロケーションID
-* 品物属性（場所名、他）
+* 場所属性（場所名、他）
 
 4.保管伝票
 * 伝票ID
