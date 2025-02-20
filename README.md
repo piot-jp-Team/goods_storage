@@ -1,4 +1,4 @@
-# goodsstorage
+# goods storage
 goods strage service
 
 お預かり品管理システムの設計
