@@ -16,7 +16,8 @@ goods strage service
 
 3.場所　LOCATION
 * ロケーションID
-* ロケーション番号（QRコードやRFIDタグなど）
+* ロケーション番号
+* ロケーションタグ（QRコードやRFIDタグなど）
 * 場所属性（場所名、他）
 
 4.保管伝票 SLIPS
@@ -29,7 +30,8 @@ goods strage service
 5.伝票明細 SLIP_DETAILS
 * 伝票明細ID
 * 保管伝票ID
-* 明細行NO （伝票番号 + 行NO QRコードやRFIDタグなど）
+* 明細行NO
+* 下げタグ（QRコードやRFIDタグなど）
 * 品物ID
 * 場所ID
 * 保管開始日時
@@ -66,6 +68,7 @@ erDiagram
     LOCATION {
         integer id PK
         string code "Only 13 characters are allowed"
+        string tagtext
         string Name "Only 50 characters are allowed"
     }
 
@@ -82,6 +85,7 @@ erDiagram
         integer id PK
         integer slips_id
         integer record_num
+        string tagtext
         integer goods_id
         integer location_id
         datetime startdate
