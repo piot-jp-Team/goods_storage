@@ -1,0 +1,2 @@
+# goodsstorage
+goods strage service
