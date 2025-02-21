@@ -6,6 +6,27 @@ goods strage service
 冬用タイヤの保管、ボトルキープ、パーティ会場のクロークなど
 誰の何を何処に収納しているのかを管理する。
 
+```mermaid
+sequenceDiagram
+    participant 所有者
+    participant 管理者
+    管理者-->>所有者: 伝票に記入依頼
+    所有者->>管理者: 保管物品
+    管理者->>保管場所: 保管物品
+    Note right of 管理者: 保管ロケーションへ <br/>写真撮影し <br/>情報登録
+    管理者-->>所有者: 保管伝票を手渡し
+    loop 保管状態管理
+        管理者<<->>保管場所: 
+    end
+    所有者-->>管理者: 返却依頼
+    Note right of 管理者: 保管ロケーションへ
+    保管場所->>管理者: 保管物品
+    管理者->>所有者: 返却
+    Note left of 管理者: 返却情報登録
+```
+
+# データ構成
+
 1.所有者　OWNER
 * 所有者ID
 * 所有者属性（名前、他）
@@ -40,7 +61,7 @@ goods strage service
 * 登録日時
 * 変更日時
 
-
+# ER図
 ```mermaid
 erDiagram
     LOCATION ||--o{ SLIP_DETAILS : allows
@@ -95,24 +116,7 @@ erDiagram
         datetime updatedate
     }
 ```
-```mermaid
-sequenceDiagram
-    participant 所有者
-    participant 管理者
-    管理者-->>所有者: 伝票に記入依頼
-    所有者->>管理者: 保管物品
-    管理者->>保管場所: 保管物品
-    Note right of 管理者: 保管ロケーションへ <br/>写真撮影し <br/>情報登録
-    管理者-->>所有者: 保管伝票を手渡し
-    loop 保管状態管理
-        管理者<<->>保管場所: 
-    end
-    所有者-->>管理者: 返却依頼
-    Note right of 管理者: 保管ロケーションへ
-    保管場所->>管理者: 保管物品
-    管理者->>所有者: 返却
-    Note left of 管理者: 返却情報登録
-```
+
 
 
 
