@@ -2,7 +2,7 @@
 goods strage service
 
 お預かり品管理システムの設計
-
+冬用タイヤの保管、ボトルキープ、パーティ会場のクロークなど
 誰の何を何処に収納しているのかを管理する。
 
 1.所有者　OWNER
@@ -42,10 +42,10 @@ goods strage service
 
 ```mermaid
 erDiagram
+    LOCATION ||--o{ SLIP_DETAILS : allows
     ADMIN ||--o{ OWNER : makes
     OWNER ||--o{ GOODS : allows
     GOODS ||--o{ SLIP_DETAILS : allows
-    LOCATION ||--o{ SLIP_DETAILS : allows
     SLIPS ||--o{ OWNER : allows
     SLIPS ||--o{ SLIP_DETAILS : allows
 
