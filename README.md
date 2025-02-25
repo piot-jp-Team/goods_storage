@@ -65,6 +65,7 @@ sequenceDiagram
 * 備考
 * 登録日時
 * 変更日時
+* ステータス
   
 5.保管伝票 SLIPS
 * 伝票ID
