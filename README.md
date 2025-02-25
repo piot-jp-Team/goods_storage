@@ -36,7 +36,8 @@ sequenceDiagram
 * 所有者属性（名前、他）
 * 登録日時
 * 変更日時
-* 
+* ステータス
+  
 2.品物　GOODS
 * 品物ID
 * 品物属性（品名、物品区分、他）
@@ -44,6 +45,7 @@ sequenceDiagram
 * 所有者ID
 * 登録日時
 * 変更日時
+* ステータス
   
 3.場所　LOCATION
 * ロケーションID
@@ -53,6 +55,7 @@ sequenceDiagram
 * 備考
 * 登録日時
 * 変更日時
+* ステータス
   
 4.予約伝票 RESERVATIONS
 * 伝票ID
@@ -70,6 +73,7 @@ sequenceDiagram
 * 備考
 * 登録日時
 * 変更日時
+* ステータス
 
 6.伝票明細 SLIP_DETAILS
 * 伝票明細ID
@@ -82,6 +86,7 @@ sequenceDiagram
 * 備考
 * 登録日時
 * 変更日時
+* ステータス
 
 # ER図
 ```mermaid
