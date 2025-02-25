@@ -13,7 +13,8 @@ goods strage service
 sequenceDiagram
     participant 所有者
     participant 管理者
-    管理者-->>所有者: 伝票に記入依頼
+    所有者-->>管理者: 予約
+    管理者-->>所有者: 予約データがない場合、伝票に記入依頼
     所有者->>管理者: 保管物品
     管理者->>保管場所: 保管物品
     Note right of 管理者: 保管ロケーションへ <br/>写真撮影し <br/>情報登録
@@ -45,15 +46,22 @@ sequenceDiagram
 * ロケーション番号
 * ロケーションタグ（QRコードやRFIDタグなど）
 * 場所属性（場所名、他）
-
-4.保管伝票 SLIPS
+* 
+4.予約伝票 RESERVATIONS
+* 伝票ID
+* 伝票番号
+* 所有者ID
+* 登録日時
+* 変更日時
+  
+5.保管伝票 SLIPS
 * 伝票ID
 * 伝票番号
 * 所有者ID
 * 登録日時
 * 変更日時
 
-5.伝票明細 SLIP_DETAILS
+6.伝票明細 SLIP_DETAILS
 * 伝票明細ID
 * 保管伝票ID
 * 明細行NO
@@ -113,6 +121,16 @@ erDiagram
         string tagtext
         integer goods_id
         integer location_id
+        datetime startdate
+        datetime enddate
+        datetime createdate
+        datetime updatedate
+    }
+
+    RESERVATIONS {
+        integer id PK
+        string number "slip number exp. 2025020199999"
+        integer owner_id
         datetime startdate
         datetime enddate
         datetime createdate
