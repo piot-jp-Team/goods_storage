@@ -12,7 +12,7 @@ goods strage service
 sequenceDiagram
     participant 所有者
     participant 管理者
-    所有者-->>管理者: 電話予約（or Incoming Webhooks）
+    所有者-->>管理者: 電話予約（or オンラインIncoming Webhooks）
     管理者-->>所有者: 予約データがない場合、伝票に記入依頼
     所有者->>管理者: 保管物品
     管理者->>保管場所: 保管物品(GOODSタグ、LOCATONタグスキャン)
