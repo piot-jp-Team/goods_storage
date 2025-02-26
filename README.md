@@ -12,10 +12,14 @@ goods strage service
 sequenceDiagram
     participant 所有者
     participant 管理者
-    所有者-->>管理者: 電話予約（or オンラインIncoming Webhooks）
+    participant DB
+    所有者-->>管理者: 電話予約
+    管理者-->>DB: 登録　or オンラインIncoming Webhooks
     管理者-->>所有者: 予約データがない場合、伝票に記入依頼
     所有者->>管理者: 保管物品
-    管理者->>保管場所: 保管物品(GOODSタグ、LOCATONタグスキャン)
+    管理者-->>DB: 登録(GOODSタグ)
+    管理者->>保管場所: 保管物品
+    管理者-->>DB: 登録(LOCATONタグスキャン)
     Note right of 管理者: 保管ロケーションへ <br/>写真撮影し <br/>情報登録
     管理者-->>所有者: 保管伝票を手渡し
     loop 保管状態管理
@@ -23,7 +27,9 @@ sequenceDiagram
     end
     所有者-->>管理者: 返却依頼
     Note right of 管理者: 保管ロケーションへ
-    保管場所->>管理者: 保管物品(GOODSタグ、LOCATONタグスキャン)
+    管理者-->>DB: 登録(GOODSタグ)
+    保管場所->>管理者: 保管物品
+    管理者-->>DB: 登録(LOCATONタグスキャン)
     管理者->>所有者: 返却
     Note left of 管理者: 返却情報登録
 ```
