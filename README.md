@@ -59,6 +59,7 @@ sequenceDiagram
 4.予約伝票 RESERVATIONS
 * 伝票ID
 * 伝票番号
+* 区分
 * 所有者ID
 * 予約日時
 * 備考
