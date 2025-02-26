@@ -106,12 +106,14 @@ erDiagram
         string address
         string phone
         string email
+        string status
     }
 
     GOODS {
         integer id PK
         string Name "Only 50 characters are allowed"
         string type
+        string status
     }
   
     LOCATION {
@@ -119,6 +121,7 @@ erDiagram
         string code "Only 13 characters are allowed"
         string tagtext
         string Name "Only 50 characters are allowed"
+        string status
     }
 
     SLIPS {
@@ -129,6 +132,7 @@ erDiagram
         datetime enddate
         datetime createdate
         datetime updatedate
+        string status
     }
     SLIP_DETAILS {
         integer id PK
@@ -141,16 +145,31 @@ erDiagram
         datetime enddate
         datetime createdate
         datetime updatedate
+        string status
     }
 
     RESERVATIONS {
         integer id PK
-        string number "slip number exp. 2025020199999"
+        string number "reserve number exp. 2025020199999"
+        string type "DriveOn, Telephone"
         integer owner_id
         datetime startdate
         datetime enddate
         datetime createdate
         datetime updatedate
+        string status
+    }
+
+    RESERVATIONS_LOG {
+        integer id PK
+        string number
+        string type
+        integer owner_id
+        datetime startdate
+        datetime enddate
+        datetime createdate
+        datetime updatedate
+        string status
     }
 ```
 
