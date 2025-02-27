@@ -13,7 +13,7 @@ sequenceDiagram
     participant 所有者
     participant 管理者
     participant DB
-    所有者-->>管理者: 電話予約　アプリなど
+    所有者-->>管理者: 冬タイヤへ交換依頼　電話予約　アプリなど
     管理者-->>DB: 登録　or オンラインAPI(Incoming Webhooks, MailHooks) ※
     Note right of 管理者: 保管ロケーションへ
     保管場所->>管理者: 冬タイヤ
@@ -29,7 +29,8 @@ sequenceDiagram
     loop 保管状態管理
         管理者<<->>保管場所: 
     end
-    所有者-->>管理者: 夏タイヤ交換依頼
+    所有者-->>管理者: 夏タイヤへ交換依頼　電話予約　アプリなど
+    管理者-->>DB: 登録　or オンラインAPI(Incoming Webhooks, MailHooks) ※
     Note right of 管理者: 保管ロケーションへ
     管理者-->>DB: 保管終了登録(夏タイヤGOODSタグ)
     保管場所->>管理者: 夏タイヤ
