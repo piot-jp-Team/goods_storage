@@ -1,4 +1,4 @@
-# SSGS
+# SSGS　設計案
 Service station goods strage system
 
 お預かり品管理システムの設計（案）
