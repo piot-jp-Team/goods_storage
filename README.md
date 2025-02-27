@@ -16,6 +16,7 @@ sequenceDiagram
     所有者-->>管理者: 電話予約　アプリなど
     管理者-->>DB: 登録　or オンラインAPI(Incoming Webhooks, MailHooks) ※
     管理者-->>所有者: 予約データがない場合、伝票に記入依頼
+    Note right of 所有者: 交換作業
     所有者->>管理者: 保管物品
     管理者-->>DB: 登録(GOODSタグ)
     管理者->>保管場所: 保管物品
