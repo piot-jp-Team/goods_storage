@@ -1,5 +1,6 @@
 # SSGS
 Service station goods strage system
+
 お預かり品管理システムの設計（案）
 
 誰の何を、何処に収納しているのかを管理する。
