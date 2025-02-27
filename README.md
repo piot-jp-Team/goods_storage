@@ -49,6 +49,7 @@ sequenceDiagram
 * 品物ID
 * 品物属性（品名、物品区分、他）
 * 物品下げタグ（QRコードやRFIDタグなど）
+* 画像ファイル
 * 所有者ID
 * 登録日時
 * 変更日時
@@ -120,8 +121,11 @@ erDiagram
 
     GOODS {
         integer id PK
-        string Name "Only 50 characters are allowed"
         string type
+        string Name "Only 50 characters are allowed"
+        string tag 
+        string image
+        string owner_id
         string status
     }
   
