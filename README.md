@@ -1,5 +1,5 @@
-# SSGS　設計案
-Service station goods strage system
+# SSTS　設計案
+Service station tire strage system
 
 タイヤ管理システムの設計（案）
 
