@@ -1,197 +1,230 @@
-# SSTS　設計案
-Service station tire strage system
+# タイヤ管理システム データベースER図
 
-タイヤ管理システムの設計（案）
+## ER図（Entity-Relationship Diagram）
 
-誰の何を、何処にいつからいつまで収納しているかを管理する。
-夏用タイヤ冬用タイヤの交換など一人の利用者が物品を交互に預けられるように
-預ける物ごとにタグ付けして管理する。（夏用タグ、冬用タグを所有者と紐づける）
-管理者は保管ロケーションタグと物品タグを紐づける。
-
-```mermaid
-sequenceDiagram
-    participant 所有者
-    participant 管理者
-    participant DB
-    所有者-->>管理者: 冬タイヤへ交換依頼　電話予約　アプリなど
-    管理者-->>DB: 登録　or オンラインAPI(Incoming Webhooks, MailHooks) ※
-    Note right of 管理者: 保管ロケーションへ
-    保管場所->>管理者: 冬タイヤ
-    管理者-->>DB: 保管終了登録(冬タイヤGOODSタグ)
-    管理者-->>所有者: 初回などデータがない場合、伝票に記入依頼
-    所有者->>管理者: 夏タイヤ
-    Note right of 管理者: 交換作業
-    管理者-->>DB: 保管開始登録(夏タイヤGOODSタグ)
-    管理者-->>所有者: 保管伝票を手渡し
-    Note right of 管理者: 保管ロケーションへ <br/>写真撮影し <br/>情報登録
-    管理者->>保管場所: 夏タイヤ
-    管理者-->>DB: 登録(LOCATONタグスキャン)
-    loop 保管状態管理
-        管理者<<->>保管場所: 
-    end
-    所有者-->>管理者: 夏タイヤへ交換依頼　電話予約　アプリなど
-    管理者-->>DB: 登録　or オンラインAPI(Incoming Webhooks, MailHooks) ※
-    Note right of 管理者: 保管ロケーションへ
-    管理者-->>DB: 保管終了登録(夏タイヤGOODSタグ)
-    保管場所->>管理者: 夏タイヤ
-    管理者-->>DB: 登録(LOCATONタグスキャン)
-    管理者->>所有者: 夏タイヤ
-    Note right of 管理者: 返却情報登録
-    管理者-->>DB: 保管開始登録(冬タイヤGOODSタグ)
-```
-※作業予約の媒体はいろいろなものに対応
-
-# データ構成
-
-1.所有者　OWNER
-* 所有者ID
-* 所有者属性（名前、他）
-* 登録日時
-* 変更日時
-* ステータス
-  
-2.品物　GOODS
-* 品物ID
-* 品物属性（品名、物品区分、他）
-* 物品下げタグ（QRコードやRFIDタグなど）
-* 画像ファイル
-* 所有者ID
-* 登録日時
-* 変更日時
-* ステータス
-  
-3.場所　LOCATION
-* ロケーションID
-* ロケーション番号
-* ロケーションタグ（QRコードやRFIDタグなど）
-* 場所属性（場所名、他）
-* 備考
-* 登録日時
-* 変更日時
-* ステータス
-  
-4.予約伝票 RESERVATIONS
-* 伝票ID
-* 伝票番号
-* 区分
-* 所有者ID
-* 予約日時
-* 備考
-* 登録日時
-* 変更日時
-* ステータス
-  
-5.保管伝票 SLIPS
-* 伝票ID
-* 伝票番号
-* 所有者ID
-* 備考
-* 登録日時
-* 変更日時
-* ステータス
-
-6.伝票明細 SLIP_DETAILS
-* 伝票明細ID
-* 保管伝票ID
-* 明細行NO
-* 品物ID
-* 場所ID
-* 保管開始日時
-* 保管終了日時
-* 備考
-* 登録日時
-* 変更日時
-* ステータス
-
-# ER図
 ```mermaid
 erDiagram
-    LOCATION ||--o{ SLIP_DETAILS : allows
-    ADMIN ||--o{ OWNER : makes
-    OWNER ||--o{ GOODS : allows
-    GOODS ||--o{ SLIP_DETAILS : allows
-    SLIPS ||--o{ OWNER : allows
-    SLIPS ||--o{ SLIP_DETAILS : allows
+    stores ||--o{ customers : "has many"
+    customers ||--o{ tire_sets : "has many"
+    tire_sets ||--o{ tire_storage : "has many"
+    tire_sets ||--o{ tire_images : "has many"
+    locations ||--o{ tire_storage : "has many"
 
-  
-    OWNER {
-        integer id PK
-        string firstName "Only 99 characters are allowed"
-        string lastName
-        string address
-        string phone
-        string email
-        string status
-    }
-
-    GOODS {
-        integer id PK
-        string type
-        string Name "Only 50 characters are allowed"
-        string tag 
-        string image
-        string owner_id
-        string status
-    }
-  
-    LOCATION {
-        integer id PK
-        string code "Only 13 characters are allowed"
-        string tagtext
-        string Name "Only 50 characters are allowed"
-        string status
+    stores {
+        bigint id PK
+        string store_code UK "店舗コード"
+        string name "店舗名"
+        string phone "電話番号"
+        string email "メール"
+        string postal_code "郵便番号"
+        string address "住所"
+        boolean is_active "有効フラグ"
+        text notes "備考"
+        timestamp created_at
+        timestamp updated_at
     }
 
-    SLIPS {
-        integer id PK
-        string number "slip number exp. 2025020199999"
-        integer owner_id
-        datetime startdate
-        datetime enddate
-        datetime createdate
-        datetime updatedate
-        string status
-    }
-    SLIP_DETAILS {
-        integer id PK
-        integer slips_id
-        integer record_num
-        string tagtext
-        integer goods_id
-        integer location_id
-        datetime startdate
-        datetime enddate
-        datetime createdate
-        datetime updatedate
-        string status
+    customers {
+        bigint id PK
+        bigint store_id FK "店舗ID"
+        string customer_code UK "顧客コード"
+        string name "顧客名"
+        string name_kana "フリガナ"
+        string phone "電話番号"
+        string email "メール"
+        string postal_code "郵便番号"
+        string address "住所"
+        string car_number "車両番号"
+        string car_model "車種"
+        text notes "備考"
+        timestamp created_at
+        timestamp updated_at
     }
 
-    RESERVATIONS {
-        integer id PK
-        string number "reserve number exp. 2025020199999"
-        string type "DriveOn, Telephone"
-        integer owner_id
-        datetime startdate
-        datetime enddate
-        datetime createdate
-        datetime updatedate
-        string status
+    tire_sets {
+        bigint id PK
+        string qr_code UK "QRコード"
+        bigint customer_id FK "顧客ID"
+        enum tire_type "タイヤタイプ(summer/winter/all_season)"
+        int tire_count "本数"
+        string manufacturer "メーカー"
+        string brand "ブランド"
+        string size "サイズ"
+        string production_year "製造年"
+        boolean rim_included "リム付き"
+        int condition_score "状態スコア"
+        text notes "備考"
+        timestamp created_at
+        timestamp updated_at
     }
 
-    RESERVATIONS_LOG {
-        integer id PK
-        string number
-        string type
-        integer owner_id
-        datetime startdate
-        datetime enddate
-        datetime createdate
-        datetime updatedate
-        string status
+    tire_storage {
+        bigint id PK
+        bigint tire_set_id FK "タイヤセットID"
+        bigint location_id FK "保管場所ID"
+        date storage_date "保管日"
+        date scheduled_return_date "返却予定日"
+        date actual_return_date "実際の返却日"
+        enum status "ステータス(stored/returned/reserved)"
+        decimal storage_fee "保管料"
+        boolean paid "支払済み"
+        string checked_in_by "入庫担当者"
+        string checked_out_by "出庫担当者"
+        text notes "備考"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    locations {
+        bigint id PK
+        string location_code UK "ロケーションコード"
+        string rack_name "ラック名"
+        string section "セクション"
+        string rack_row "ラック行"
+        string rack_column "ラック列"
+        int capacity "収容数"
+        boolean is_available "利用可能"
+        text notes "備考"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    tire_images {
+        bigint id PK
+        bigint tire_set_id FK "タイヤセットID"
+        string file_path "ファイルパス"
+        string file_name "ファイル名"
+        bigint file_size "ファイルサイズ"
+        string mime_type "MIMEタイプ"
+        int display_order "表示順"
+        text description "説明"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    users {
+        bigint id PK
+        string name "ユーザー名"
+        string email UK "メール"
+        timestamp email_verified_at
+        string password "パスワード"
+        string role "役割(admin/staff)"
+        string remember_token
+        timestamp created_at
+        timestamp updated_at
     }
 ```
 
+## データベース構造の概要
 
+### 主要エンティティ
 
+#### 1. Store（店舗）
+- 複数の店舗を管理するためのマスターテーブル
+- 各店舗に固有の店舗コード（store_code）を持つ
+- 店舗ごとに顧客を管理
 
+#### 2. Customer（顧客）
+- 店舗に紐づく顧客情報を管理
+- 顧客コード、連絡先、住所、車両情報を保持
+- 各顧客は複数のタイヤセットを所有可能
 
+#### 3. TireSet（タイヤセット）
+- 顧客が所有するタイヤの情報
+- QRコードで一意に識別
+- タイヤのタイプ（夏/冬/オールシーズン）、メーカー、サイズ、状態などを記録
+
+#### 4. TireStorage（タイヤ保管履歴）
+- タイヤセットの保管・返却履歴を管理
+- 保管場所（Location）との紐付け
+- 入出庫日、料金、支払状況、担当者を記録
+- ステータス管理（保管中/返却済み/予約済み）
+
+#### 5. Location（保管場所）
+- タイヤの物理的な保管位置を管理
+- ラック名、セクション、行、列で位置を特定
+- 収容数と利用可否を管理
+
+#### 6. TireImage（タイヤ画像）
+- タイヤセットに関連する画像ファイルを管理
+- タイヤの状態確認用の写真を保存
+- 表示順序を管理可能
+
+#### 7. User（ユーザー）
+- システムの認証・認可を管理
+- 役割（admin/staff）によるアクセス制御
+- Laravel SanctumトークンによるAPI認証
+
+## リレーションシップ
+
+### 1対多の関係
+
+1. **Store → Customer**
+   - 1つの店舗は複数の顧客を持つ
+   - 外部キー: `customers.store_id`
+   - 削除時: SET NULL
+
+2. **Customer → TireSet**
+   - 1人の顧客は複数のタイヤセットを所有
+   - 外部キー: `tire_sets.customer_id`
+   - 削除時: CASCADE（顧客削除時にタイヤセットも削除）
+
+3. **TireSet → TireStorage**
+   - 1つのタイヤセットは複数の保管履歴を持つ
+   - 外部キー: `tire_storage.tire_set_id`
+   - 削除時: CASCADE
+
+4. **TireSet → TireImage**
+   - 1つのタイヤセットは複数の画像を持つ
+   - 外部キー: `tire_images.tire_set_id`
+   - 削除時: CASCADE
+
+5. **Location → TireStorage**
+   - 1つの保管場所は複数の保管履歴を持つ
+   - 外部キー: `tire_storage.location_id`
+   - 削除時: SET NULL
+
+## インデックス戦略
+
+### ユニークインデックス
+- `stores.store_code` - 店舗コード
+- `customers.customer_code` - 顧客コード
+- `tire_sets.qr_code` - QRコード
+- `locations.location_code` - ロケーションコード
+- `users.email` - メールアドレス
+
+### 検索用インデックス
+- `customers.phone` - 電話番号検索
+- `customers.name` - 顧客名検索
+- `tire_sets.tire_type` - タイヤタイプフィルタ
+- `tire_storage.status` - ステータス検索
+- `tire_storage.storage_date` - 保管日検索
+- `locations.rack_name` - ラック名検索
+
+## データ整合性
+
+### 外部キー制約
+- すべての関連テーブルに外部キー制約を設定
+- CASCADE削除: 親データ削除時に関連データも自動削除
+- SET NULL: 親データ削除時に外部キーをNULLに設定
+
+### タイムスタンプ
+- すべてのテーブルに `created_at` と `updated_at` を設定
+- データの作成・更新履歴を自動記録
+
+## 技術仕様
+
+- **ORM**: Laravel Eloquent
+- **データベース**: MySQL / SQLite（開発環境）
+- **文字コード**: UTF8MB4（多言語対応）
+- **認証**: Laravel Sanctum（APIトークン認証）
+- **バージョン管理**: Laravel Migrations
+
+## 使用方法
+
+このER図はMermaid記法で記述されています。以下のツールで表示可能です：
+
+1. **GitHub** - このファイルをGitHubにプッシュすると自動的にレンダリングされます
+2. **VS Code** - Mermaid Preview拡張機能をインストール
+3. **オンラインエディタ** - https://mermaid.live/ で直接編集・表示
+4. **ドキュメントツール** - GitBook、Docusaurus、MkDocsなどで使用可能
