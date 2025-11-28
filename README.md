@@ -53,6 +53,13 @@ QRコードで一意に識別
 表示順序を管理可能
 7. User（ユーザー）
 
+# Link
+- [DATABASE_ER_DIAGRAM](#DATABASE_ER_DIAGRAM)
+
+## DATABASE_ER_DIAGRAM
+
+DATABASE_ER_DIAGRAM
+
 ## 使用方法
 
 1. 顧客登録
