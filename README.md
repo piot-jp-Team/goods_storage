@@ -19,8 +19,7 @@
 - QRコード読み取り・生成ライブラリ
 
 ### バックエンド
-- Node.js
-- Express.js
+- laravel
 - MySQL
 - QRコード生成ライブラリ
 
